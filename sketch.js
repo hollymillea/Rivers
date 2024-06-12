@@ -13,7 +13,7 @@ function draw() {
    
   let black = color(58, 56, 56);
   let color1 = color(135, 56, 45);
-  let color2 = color(231, 171, 99);
+  let color2 = color(136, 8, 8);
 
   const marginX = 50;
   const marginY = 80;
