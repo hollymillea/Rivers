@@ -8,8 +8,8 @@ function draw() {
   background(255); // Set background to white
   let gridSize = 5; // Size of the grid cells for the first layer
   let circleSize; // Variable to store the size of each circle
-  let noiseZoom = 0.0005;
-  let time = frameCount * 0.1; // Time variable to animate noise
+  let noiseZoom = 0.001;
+  let time = frameCount * 0.05; // Time variable to animate noise
    
   let black = color(58, 56, 56);
   let color1 = color(135, 56, 45);
