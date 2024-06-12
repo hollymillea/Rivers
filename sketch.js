@@ -8,37 +8,43 @@ function draw() {
   background(255); // Set background to white
   let gridSize = 12; // Size of the grid cells for the first layer
   let circleSize; // Variable to store the size of each circle
-  let noiseZoom = 0.002;
+  let noiseZoom = 0.001;
    
   let black = color(0, 0, 0);
   let color2 = color(28, 111, 121);
-  let color1 = color(64, 121, 85);
+  let color1 = black//color(64, 121, 85);
+
+  const marginX = 30;
+  const marginY = 200;
   
   // First layer of circles
-  for (let y = 0; y < height; y += gridSize) {
+  for (let y = 0; y < (height); y += gridSize) {
     for (let x = 0; x < width; x += gridSize) {
+      // First layer
       let noiseVal = noise((x + 1000) * noiseZoom, (y + 1000) * noiseZoom); // Offset noise to differentiate from first layer
       noiseVal = transformNoise(noiseVal);
       
       circleSize = map(noiseVal, 0, 1, 2, gridSize);
-      
-      // Blue empty circle
-      fill(color2);
+
+      fill(color1);
       stroke(black);
       ellipse(x, y, circleSize, circleSize);
+
+      // Second layer
+      noiseVal = noise(x * noiseZoom, y * noiseZoom);
+      
     }
   }
 
   // Second layer of circles
-  for (let y = 0; y < height; y += gridSize) {
+  for (let y = marginY; y < height-marginY; y += gridSize) {
     for (let x = 0; x < width; x += gridSize) {
       let noiseVal = noise(x * noiseZoom, y * noiseZoom);
       let noiseVal2 = transformNoise(noiseVal);
       
       circleSize = map(noiseVal2, 0, 1, 2, gridSize);
       
-      // Red filled circle
-      fill(color1);
+      fill(color2);
       stroke(black);
       ellipse(x + gridSize / 2, y + gridSize / 2, circleSize, circleSize);
     }
@@ -49,13 +55,13 @@ function draw() {
 
 function transformNoise(x) {
   // How long should the flat bits at the top be?
-  const xHigh = 0.3;
+  const xHigh = 0.1;
   
   // How long should the flat bits at the bottom be?
   const xLow = 0;
   
   // What range are we extracting?
-  const midPoint = 0.5;
+  const midPoint = 0.4;
   
   // We want our curve to start at 'start'
   // It should then dip down until it gets to dipStop
