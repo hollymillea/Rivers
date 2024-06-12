@@ -8,7 +8,7 @@ function draw() {
   background(255); // Set background to white
   let gridSize = 5; // Size of the grid cells for the first layer
   let circleSize; // Variable to store the size of each circle
-  let noiseZoom = 0.001;
+  let noiseZoom = 0.0005;
   let time = frameCount * 0.1; // Time variable to animate noise
    
   let black = color(58, 56, 56);
@@ -22,8 +22,8 @@ function draw() {
   for (let y = marginY; y < (height - marginY); y += gridSize) {
     for (let x = marginX; x < (width - marginX); x += gridSize) {
       // First layer
-      let noiseVal = noise((x + 100) * noiseZoom, (y + 0) * noiseZoom); // Offset noise to differentiate from first layer
-      noiseVal = transformNoise(noiseVal, 0.50);
+      let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom, time); // Offset noise to differentiate from first layer
+      noiseVal = transformNoise(noiseVal);
       
       circleSize = map(noiseVal, 0, 1, 0, gridSize);
 
@@ -43,8 +43,8 @@ function draw() {
   // Second layer of circles
   for (let y = marginY; y < height-marginY; y += gridSize) {
     for (let x = marginX; x < width-marginX; x += gridSize) {
-      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
-      let noiseVal2 = transformNoise(noiseVal, 0.50);
+      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time+0.1);
+      let noiseVal2 = transformNoise(noiseVal);
       
       circleSize = map(noiseVal2, 0, 1, 0, gridSize);
 
@@ -83,7 +83,7 @@ function transformNoise(x, midPoint) {
   const curveLength = 0.05;
   
   // What range are we extracting?
-//   const midPoint = 0.5;
+  if (!midPoint) midPoint = 0.5;
   
   // We want our curve to start at 'start'
   // It should then dip down until it gets to dipStop
