@@ -22,8 +22,8 @@ function draw() {
   for (let y = marginY; y < (height - marginY); y += gridSize) {
     for (let x = marginX; x < (width - marginX); x += gridSize) {
       // First layer
-      let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom); // Offset noise to differentiate from first layer
-      noiseVal = transformNoise(noiseVal, 0.35);
+      let noiseVal = noise((x + 100) * noiseZoom, (y + 0) * noiseZoom); // Offset noise to differentiate from first layer
+      noiseVal = transformNoise(noiseVal, 0.50);
       
       circleSize = map(noiseVal, 0, 1, 0, gridSize);
 
@@ -44,7 +44,7 @@ function draw() {
   for (let y = marginY; y < height-marginY; y += gridSize) {
     for (let x = marginX; x < width-marginX; x += gridSize) {
       let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
-      let noiseVal2 = transformNoise(noiseVal, 0.28);
+      let noiseVal2 = transformNoise(noiseVal, 0.50);
       
       circleSize = map(noiseVal2, 0, 1, 0, gridSize);
 
