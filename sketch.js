@@ -6,13 +6,14 @@ function setup() {
 
 function draw() {
   background(255); // Set background to white
-  let gridSize = 12; // Size of the grid cells for the first layer
+  let gridSize = 5; // Size of the grid cells for the first layer
   let circleSize; // Variable to store the size of each circle
-  let noiseZoom = 0.0015;
+  let noiseZoom = 0.001;
+  let time = frameCount * 0.1; // Time variable to animate noise
    
-  let black = color(0, 0, 0);
-  let color1 = color(39, 126, 150);
-  let color2 = color(153, 109, 0);
+  let black = color(58, 56, 56);
+  let color1 = color(135, 56, 45);
+  let color2 = color(231, 171, 99);
 
   const marginX = 50;
   const marginY = 80;
@@ -21,10 +22,12 @@ function draw() {
   for (let y = marginY; y < (height - marginY); y += gridSize) {
     for (let x = marginX; x < (width - marginX); x += gridSize) {
       // First layer
-      let noiseVal = noise((x + 1000) * noiseZoom, (y + 1000) * noiseZoom); // Offset noise to differentiate from first layer
-      noiseVal = transformNoise(noiseVal);
+      let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom); // Offset noise to differentiate from first layer
+      noiseVal = transformNoise(noiseVal, 0.35);
       
-      circleSize = map(noiseVal, 0, 1, 2, gridSize);
+      circleSize = map(noiseVal, 0, 1, 0, gridSize);
+
+      if (circleSize < 0.5) continue;
 
       fill(black);
       stroke(black);
@@ -37,12 +40,14 @@ function draw() {
   }
 
   // Second layer of circles
-  for (let y = marginY; y < height/2; y += gridSize) {
+  for (let y = marginY; y < height-marginY; y += gridSize) {
     for (let x = marginX; x < width-marginX; x += gridSize) {
-      let noiseVal = noise(x * noiseZoom, y * noiseZoom);
-      let noiseVal2 = transformNoise(noiseVal);
+      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
+      let noiseVal2 = transformNoise(noiseVal, 0.28);
       
-      circleSize = map(noiseVal2, 0, 1, 2, gridSize);
+      circleSize = map(noiseVal2, 0, 1, 0, gridSize);
+
+      if (circleSize < 1) continue;
       
       fill(color2);
       stroke(black);
@@ -50,51 +55,53 @@ function draw() {
     }
   }
 
-  // Third layer of circles
-  for (let y = height/2; y < height-marginY; y += gridSize) {
+  // Second layer of circles
+  for (let y = marginY; y < height-marginY; y += gridSize) {
     for (let x = marginX; x < width-marginX; x += gridSize) {
-      let noiseVal = noise((x + 2000) * noiseZoom, (y + 2000) * noiseZoom);
-      let noiseVal2 = transformNoise(noiseVal);
+      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
+      let noiseVal2 = transformNoise(noiseVal, 0.42);
       
-      circleSize = map(noiseVal2, 0, 1, 2, gridSize);
+      circleSize = map(noiseVal2, 0, 1, 0, gridSize);
+
+      if (circleSize < 1) continue;
       
       fill(color1);
       stroke(black);
       ellipse(x + gridSize / 2, y + gridSize / 2, circleSize, circleSize);
     }
   }
-  
-  noLoop();
 }
 
-function transformNoise(x) {
+function transformNoise(x, midPoint) {
   // How long should the flat bits at the top be?
-  const xHigh = 0.2;
+//   const xHigh = 0.2;
   
   // How long should the flat bits at the bottom be?
-  const xLow = 0.1;
+  const xLow = 0.05;
+
+  const curveLength = 0.05;
   
   // What range are we extracting?
-  const midPoint = 0.5;
+//   const midPoint = 0.5;
   
   // We want our curve to start at 'start'
   // It should then dip down until it gets to dipStop
   // Then it should sit at value 0
   // At dipStart it should then curve upwards again
   // And stop at end at value 1
-  const start = xHigh;
   const dipStop = midPoint - (xLow / 2);
+  const start = dipStop - curveLength;
   const dipStart = dipStop + (xLow / 2);
-  const end = dipStart + (dipStop - start);
+  const end = dipStart + curveLength;
   
   var y;
   
-  if (x >= 0 && x < xHigh) {
+  if (x >= 0 && x < start) {
     y = 1;
   }
-  else if (x >= xHigh && x <= dipStop) {
+  else if (x >= start && x <= dipStop) {
     // Cosine graph starting at xHigh, ending at dipStop
-    y = mapCos(x, xHigh, dipStop, 0, 1);
+    y = mapCos(x, start, dipStop, 0, 1);
   }
   else if (x > dipStop && x < dipStart) {
     y = 0;
