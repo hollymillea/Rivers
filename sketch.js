@@ -14,12 +14,12 @@ function draw() {
   let color2 = color(28, 111, 121);
   let color1 = black//color(64, 121, 85);
 
-  const marginX = 30;
-  const marginY = 200;
+  const marginX = 50;
+  const marginY = 80;
   
   // First layer of circles
-  for (let y = 0; y < (height); y += gridSize) {
-    for (let x = 0; x < width; x += gridSize) {
+  for (let y = marginY; y < (height - marginY); y += gridSize) {
+    for (let x = marginX; x < (width - marginX); x += gridSize) {
       // First layer
       let noiseVal = noise((x + 1000) * noiseZoom, (y + 1000) * noiseZoom); // Offset noise to differentiate from first layer
       noiseVal = transformNoise(noiseVal);
@@ -38,7 +38,7 @@ function draw() {
 
   // Second layer of circles
   for (let y = marginY; y < height-marginY; y += gridSize) {
-    for (let x = 0; x < width; x += gridSize) {
+    for (let x = marginX; x < width-marginX; x += gridSize) {
       let noiseVal = noise(x * noiseZoom, y * noiseZoom);
       let noiseVal2 = transformNoise(noiseVal);
       
