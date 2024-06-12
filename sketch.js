@@ -27,9 +27,10 @@ function draw() {
       
       circleSize = map(noiseVal, 0, 1, 0, gridSize);
 
-      if (circleSize < 0.5) continue;
+    //   if (circleSize < 0.5) continue;
 
-      fill(black);
+    //   fill(black);
+      noFill();
       stroke(black);
       ellipse(x, y, circleSize, circleSize);
 
@@ -47,7 +48,7 @@ function draw() {
       
       circleSize = map(noiseVal2, 0, 1, 0, gridSize);
 
-      if (circleSize < 1) continue;
+    //   if (circleSize < 1) continue;
       
       fill(color2);
       stroke(black);
@@ -55,21 +56,21 @@ function draw() {
     }
   }
 
-  // Second layer of circles
-  for (let y = marginY; y < height-marginY; y += gridSize) {
-    for (let x = marginX; x < width-marginX; x += gridSize) {
-      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
-      let noiseVal2 = transformNoise(noiseVal, 0.42);
+//   // Second layer of circles
+//   for (let y = marginY; y < height-marginY; y += gridSize) {
+//     for (let x = marginX; x < width-marginX; x += gridSize) {
+//       let noiseVal = noise(x * noiseZoom, y * noiseZoom, time);
+//       let noiseVal2 = transformNoise(noiseVal, 0.42);
       
-      circleSize = map(noiseVal2, 0, 1, 0, gridSize);
+//       circleSize = map(noiseVal2, 0, 1, 0, gridSize);
 
-      if (circleSize < 1) continue;
+//       if (circleSize < 1) continue;
       
-      fill(color1);
-      stroke(black);
-      ellipse(x + gridSize / 2, y + gridSize / 2, circleSize, circleSize);
-    }
-  }
+//       fill(color1);
+//       stroke(black);
+//       ellipse(x + gridSize / 2, y + gridSize / 2, circleSize, circleSize);
+//     }
+//   }
 }
 
 function transformNoise(x, midPoint) {
