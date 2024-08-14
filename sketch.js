@@ -6,7 +6,7 @@ let totalFrames = 150; // Total number of frames to capture
 let currentFrame = 0;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(800, 300);
   noStroke(); // Remove border from circles
 }
 
