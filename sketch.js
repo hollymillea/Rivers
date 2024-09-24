@@ -5,9 +5,17 @@
 let totalFrames = 150; // Total number of frames to capture
 let currentFrame = 0;
 
+var color2;
+
 function setup() {
-  createCanvas(800, 300);
+  // createCanvas(800, 300);
+  createCanvas(windowWidth, windowHeight);
   noStroke(); // Remove border from circles
+
+  // Generate a random colour for the second layer
+  color2 = color(random(255), random(255), random(255));
+
+  noLoop();
 }
 
 function draw() {
@@ -16,21 +24,21 @@ function draw() {
   let circleSize; // Variable to store the size of each circle
   let noiseZoom = 0.001;
   let time = currentFrame * 0.02; // Time variable to animate noise
-   
+
   let black = color(58, 56, 56);
   let color1 = color(135, 56, 45);
-  let color2 = color(136, 8, 8);
+  // let color2 = color(136, 8, 8);
 
   const marginX = 10;
   const marginY = 10;
-  
+
   // First layer of circles
-  for (let y = marginY; y < (height - marginY); y += gridSize) {
-    for (let x = marginX; x < (width - marginX); x += gridSize) {
+  for (let y = marginY; y < height - marginY; y += gridSize) {
+    for (let x = marginX; x < width - marginX; x += gridSize) {
       // First layer
       let noiseVal = noise((x + 0) * noiseZoom, (y + 0) * noiseZoom, time); // Offset noise to differentiate from first layer
       noiseVal = transformNoise(noiseVal);
-      
+
       circleSize = map(noiseVal, 0, 1, 0, gridSize);
       noFill();
       stroke(black);
@@ -38,28 +46,27 @@ function draw() {
 
       // Second layer
       noiseVal = noise(x * noiseZoom, y * noiseZoom);
-      
     }
   }
 
   // Second layer of circles
-  for (let y = marginY; y < height-marginY; y += gridSize) {
-    for (let x = marginX; x < width-marginX; x += gridSize) {
-      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time+0.1);
+  for (let y = marginY; y < height - marginY; y += gridSize) {
+    for (let x = marginX; x < width - marginX; x += gridSize) {
+      let noiseVal = noise(x * noiseZoom, y * noiseZoom, time + 0.1);
       let noiseVal2 = transformNoise(noiseVal);
-      
+
       circleSize = map(noiseVal2, 0, 1, 0, gridSize);
-      
+
       fill(color2);
       stroke(black);
       ellipse(x + gridSize / 2, y + gridSize / 2, circleSize, circleSize);
     }
   }
-  
+
   // Save the current frame as an image
   // saveFrame();
 
-  console.log('Frame ' + currentFrame + ' saved');
+  console.log("Frame " + currentFrame + " saved");
 
   // Stop the loop when the desired number of frames is reached
   if (currentFrame >= totalFrames) {
@@ -71,38 +78,34 @@ function draw() {
 
 function saveFrame() {
   let frameName = nf(currentFrame, 4); // Name the frame with leading zeros
-  saveCanvas('frame_' + frameName, 'png'); // Save the frame as a PNG
+  saveCanvas("frame_" + frameName, "png"); // Save the frame as a PNG
 }
 
 function transformNoise(x, midPoint) {
   const xLow = 0.05;
   const curveLength = 0.05;
-  
+
   if (!midPoint) midPoint = 0.5;
-  
-  const dipStop = midPoint - (xLow / 2);
+
+  const dipStop = midPoint - xLow / 2;
   const start = dipStop - curveLength;
-  const dipStart = dipStop + (xLow / 2);
+  const dipStart = dipStop + xLow / 2;
   const end = dipStart + curveLength;
-  
+
   var y;
-  
+
   if (x >= 0 && x < start) {
     y = 1;
-  }
-  else if (x >= start && x <= dipStop) {
+  } else if (x >= start && x <= dipStop) {
     y = mapCos(x, start, dipStop, 0, 1);
-  }
-  else if (x > dipStop && x < dipStart) {
+  } else if (x > dipStop && x < dipStart) {
     y = 0;
-  }
-  else if (x > dipStart && x <= end) {
+  } else if (x > dipStart && x <= end) {
     y = 1 - mapCos(x, dipStart, end, 0, 1);
-  }
-  else {
+  } else {
     y = 1;
   }
-  
+
   return 1 - y;
 }
 
